@@ -1,6 +1,6 @@
 var Backbone = require('backbone');
 var SuperRouter = {};
-var _ = require('underscore-contrib');
+var _ = require('underscore');
 var fromQuery = require('querystring/decode');
 
 Backbone.history.routeObjects = [];

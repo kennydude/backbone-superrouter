@@ -1,6 +1,6 @@
 {
   "name": "backbone.superrouter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Backbone router powerpack",
   "main": "backbone.superrouter.js",
   "dependencies": {
