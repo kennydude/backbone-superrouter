@@ -56,8 +56,13 @@ Backbone, however you can override it if you want to.
 ##### obj.run(fragment, options)
 
 This is called to run the route if it matched. This function will need to
-parse the fragment of any url parameters, deal with the options hash (defaults
-to putting in `this.options`) and then call the `obj.run(...)` function.
+parse the fragment of any url and query parameters, deal with the
+options hash (defaults to putting in `this.options`) and then call the
+`obj.run(...)` function.
+
+##### obj.initialize()
+
+Create the route. By default this constructs the regex used to match with
 
 #### Route.extend(objs)
 

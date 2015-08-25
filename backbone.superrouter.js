@@ -1,6 +1,7 @@
 var Backbone = require('backbone');
 var SuperRouter = {};
 var _ = require('underscore-contrib');
+var fromQuery = require('querystring/decode');
 
 Backbone.history.routeObjects = [];
 var pathStripper = /#.*$/;
@@ -103,7 +104,7 @@ _.extend(Route.prototype, {
     this.query = {};
     if(query != undefined){
       // Querystring was passed
-      this.query = _.fromQuery(query);
+      this.query = fromQuery(query);
       this.options = _.extend(_.fromQuery(query), this.options);
     }
 
