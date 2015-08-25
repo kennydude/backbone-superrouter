@@ -25,7 +25,8 @@ And then you can use the normal `Backbone.history.navigate('users/1', {trigger: 
 to get to this route.
 
 Any options passed to the navigate function are available inside of the route
-(by default) from `this.options`
+(by default) from `this.options`. Also any query parameters (yes they work)
+are available from `this.options` (but navigate overrides any) or `this.query`
 
 Note the use of `Route.create` as this creates the route and adds it to the
 list of routes in the system.

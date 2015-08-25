@@ -1,6 +1,6 @@
 var Backbone = require('backbone');
 var SuperRouter = {};
-var _ = require('underscore');
+var _ = require('underscore-contrib');
 
 Backbone.history.routeObjects = [];
 var pathStripper = /#.*$/;
@@ -77,11 +77,17 @@ var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
 
 _.extend(Route.prototype, {
   route: function(){
+    // This function is called when the route was matched and
+    // executed
     throw new Exception("Route.route() was not implemented");
   },
   url: null,
+  regex: null,
+
   matches: function(fragment){
-    if(this.url == null){
+    // This function returns true if the route was matched
+
+    if(this.url == null || this.regex == null){
       console.warn("Route.url was not overriden!");
       return false;
     };
@@ -89,22 +95,37 @@ _.extend(Route.prototype, {
     return this.regex.test(fragment);
   },
   run: function(fragment, options){
+    // Run executes the route
+    this.options = options;
+
     var params = this.regex.exec(fragment).slice(1);
+    var query = params.pop();
+    this.query = {};
+    if(query != undefined){
+      // Querystring was passed
+      this.query = _.fromQuery(query);
+      this.options = _.extend(_.fromQuery(query), this.options);
+    }
+
     params = _.map(params, function(param, i){
       if (i === params.length - 1) return param || null;
       return param ? decodeURIComponent(param) : null;
     });
-    this.options = options;
+
     this.route.apply(this, params);
   },
   initialize: function(){
-    var route = this.url.replace(escapeRegExp, '\\$&')
-                 .replace(optionalParam, '(?:$1)?')
-                 .replace(namedParam, function(match, optional) {
-                   return optional ? match : '([^/?]+)';
-                 })
-                 .replace(splatParam, '([^?]*?)');
-    this.regex = new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+    // Initialize. Defaults to creating the regex
+
+    if(this.url != null){
+      var route = this.url.replace(escapeRegExp, '\\$&')
+                   .replace(optionalParam, '(?:$1)?')
+                   .replace(namedParam, function(match, optional) {
+                     return optional ? match : '([^/?]+)';
+                   })
+                   .replace(splatParam, '([^?]*?)');
+      this.regex = new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+    }
   }
 });
 

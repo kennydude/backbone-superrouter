@@ -4,17 +4,18 @@ var sinon = require('sinon');
 var Backbone = require('backbone');
 var SuperRouter = require('../backbone.superrouter');
 
-describe('Should route things', function(){
-  beforeEach(function(){
-    document.location.hash = "thisisnotarealpage";
-    Backbone.history.start({silent: true});
-  });
+beforeEach(function(){
+  document.location.hash = "thisisnotarealpage";
+  Backbone.history.start({silent: true});
+});
 
-  afterEach(function(){
-    SuperRouter.clear();
-    Backbone.history.stop();
-    console.log("---");
-  });
+afterEach(function(){
+  SuperRouter.clear();
+  Backbone.history.stop();
+  console.log("---");
+});
+
+describe('Basic routing', function(){
 
   it('should navigate normally', function(){
     var testRan = false;
@@ -64,4 +65,42 @@ describe('Should route things', function(){
       {trigger: true, dialog: true})).to.equal(true);
     chai.expect(testRan).to.equal(true);
   });
+
+});
+
+describe('Query Parameters', function(){
+
+  it('should pass query parameters properly', function(){
+    var testRan = false;
+    SuperRouter.Route.create({
+      url: "objects",
+      route: function(){
+        console.log("routed", this.query);
+        if(this.query.blue == "true"){
+          testRan = true;
+        }
+      }
+    });
+
+    chai.expect(Backbone.history.navigate("/objects?blue=true", {trigger: true})).to.equal(true);
+    chai.expect(testRan).to.equal(true);
+  });
+
+  it('should sort options properly', function(){
+    var testRan = false;
+    SuperRouter.Route.create({
+      url: "objects",
+      route: function(){
+        console.log("routed", this.query);
+        if(this.query.blue == "true" && this.options.blue == "12"){
+          testRan = true;
+        }
+      }
+    });
+
+    chai.expect(Backbone.history.navigate("/objects?blue=true", {trigger: true,
+      blue: "12"})).to.equal(true);
+    chai.expect(testRan).to.equal(true);
+  });
+
 });
