@@ -3,10 +3,11 @@ var SuperRouter = {};
 var _ = require('underscore');
 
 Backbone.history.routeObjects = [];
+var pathStripper = /#.*$/;
 
 Backbone.history.navigate = function(fragment, options) {
   // We have to override Backbone's existing navigate by copying it :(
-  if (!History.started) return false;
+  if (!Backbone.History.started) return false;
   if (!options || options === true) options = {trigger: !!options};
 
   // Normalize the fragment.
@@ -56,10 +57,11 @@ Backbone.history.navigate = function(fragment, options) {
 };
 
 Backbone.history.loadUrl = function(fragment, options){
-  console.log("overriden ", JSON.stringify(fragment));
+  fragment = this.fragment = this.getFragment(fragment);
+
   return _.some(Backbone.history.routeObjects, function(route){
     if(route.matches(fragment)){
-      route.route();
+      route.run(fragment, options);
       return true;
     }
     return false;
@@ -82,9 +84,18 @@ _.extend(Route.prototype, {
     if(this.url == null){
       console.warn("Route.url was not overriden!");
       return false;
-    }
+    };
 
-    return this.regex.test(fragment)
+    return this.regex.test(fragment);
+  },
+  run: function(fragment, options){
+    var params = this.regex.exec(fragment).slice(1);
+    params = _.map(params, function(param, i){
+      if (i === params.length - 1) return param || null;
+      return param ? decodeURIComponent(param) : null;
+    });
+    this.options = options;
+    this.route.apply(this, params);
   },
   initialize: function(){
     var route = this.url.replace(escapeRegExp, '\\$&')
