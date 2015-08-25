@@ -105,7 +105,7 @@ _.extend(Route.prototype, {
     if(query != undefined){
       // Querystring was passed
       this.query = fromQuery(query);
-      this.options = _.extend(_.fromQuery(query), this.options);
+      this.options = _.extend(fromQuery(query), this.options);
     }
 
     params = _.map(params, function(param, i){
