@@ -104,3 +104,34 @@ describe('Query Parameters', function(){
   });
 
 });
+
+describe('Unrouting', function(){
+  it('should unroute properly', function(){
+    var testRan = false;
+    SuperRouter.Route.create({
+      url: "objects",
+      route: function(){},
+      unroute: function(){
+        console.log("unrouted", this.query);
+        if(this.query.blue == "true"){
+          testRan = true;
+        }
+      }
+    });
+
+    SuperRouter.Route.create({
+      url: "somewhereElse",
+      route: function(){}
+    })
+
+    chai.expect(Backbone.history.navigate("/objects?blue=true", {trigger: true})).to.equal(true);
+    chai.expect(Backbone.history.navigate("/somewhereElse", {trigger: true})).to.equal(true);
+    chai.expect(testRan).to.equal(true);
+
+    testRan = false;
+
+    chai.expect(Backbone.history.navigate("/objects?blue=true", {trigger: true})).to.equal(true);
+    chai.expect(Backbone.history.navigate("/somewhereElse", {trigger: true})).to.equal(true);
+    chai.expect(testRan).to.equal(true);
+  });
+});

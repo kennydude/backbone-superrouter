@@ -62,12 +62,18 @@ Backbone.history.loadUrl = function(fragment, options){
 
   return _.some(Backbone.history.routeObjects, function(route){
     if(route.matches(fragment)){
+      if(this.currentRoute){
+        this.currentRoute.unroute();
+      }
       route.run(fragment, options);
+      this.currentRoute = route;
       return true;
     }
     return false;
-  });
+  }, this);
 };
+
+Backbone.history.currentRoute = null;
 
 var Route = SuperRouter.Route = function(){};
 
@@ -82,6 +88,13 @@ _.extend(Route.prototype, {
     // executed
     throw new Exception("Route.route() was not implemented");
   },
+
+  unroute: function(){
+    // This function is called when the route is being changed
+    // away from this one
+    // Defaults to doing nothing
+  },
+
   url: null,
   regex: null,
 
@@ -95,6 +108,7 @@ _.extend(Route.prototype, {
 
     return this.regex.test(fragment);
   },
+
   run: function(fragment, options){
     // Run executes the route
     this.options = options || {};
@@ -115,6 +129,7 @@ _.extend(Route.prototype, {
 
     this.route.apply(this, params);
   },
+
   initialize: function(){
     // Initialize. Defaults to creating the regex
 
