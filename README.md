@@ -1,6 +1,6 @@
 # Backbone SuperRouter
 
-[![Circle CI](https://circleci.com/gh/kennydude/backbone-superrouter.svg?style=svg)](https://circleci.com/gh/kennydude/backbone-superrouter)
+[![Circle CI](https://circleci.com/gh/mypebble/backbone-superrouter.svg?style=svg)](https://circleci.com/gh/mypebble/backbone-superrouter)
 
 [![NPM](https://nodei.co/npm/backbone.superrouter.png)](https://npmjs.org/package/backbone.superrouter)
 

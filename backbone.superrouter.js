@@ -97,7 +97,7 @@ _.extend(Route.prototype, {
   },
   run: function(fragment, options){
     // Run executes the route
-    this.options = options;
+    this.options = options || {};
 
     var params = this.regex.exec(fragment).slice(1);
     var query = params.pop();
