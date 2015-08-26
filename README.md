@@ -44,7 +44,7 @@ Required elements on obj are `url` and `route`.
 The route function. Any url params specified in `url` will be passed as
 url parameters (like Backbone does)
 
-#### obj.unroute()
+##### obj.unroute()
 
 This is called when you are no longer the current route and another route
 has been activated. By default this does nothing.
