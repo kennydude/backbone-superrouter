@@ -106,7 +106,11 @@ _.extend(Route.prototype, {
       return false;
     };
 
-    return this.regex.test(fragment);
+    var matches = this.regex.test(fragment);
+    if(matches){
+        this.matchedURL = fragment;
+    }
+    return matches;
   },
 
   run: function(fragment, options){

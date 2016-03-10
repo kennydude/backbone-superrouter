@@ -58,6 +58,8 @@ The url to match on. This is the [same as Backbone.](http://backbonejs.org/#Rout
 Returns true if the route matches fragment. The default works the same as
 Backbone, however you can override it if you want to.
 
+By default we put the result in `this.matchedURL`.
+
 ##### obj.run(fragment, options)
 
 This is called to run the route if it matched. This function will need to
